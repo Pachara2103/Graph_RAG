@@ -1,0 +1,29 @@
+services:
+  neo4j:
+    image: neo4j
+    container_name: neo4j_graph_db
+    ports:
+      - "7474:7474" # HTTP (Neo4j Browser)
+      - "7687:7687" # Bolt Protocol
+    environment:
+      - NEO4J_AUTH=neo4j/bas12345
+      - NEO4J_PLUGINS=["apoc"]
+      
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+      - neo4j_import:/var/lib/neo4j/import
+      - neo4j_plugins:/plugins
+
+    restart: unless-stopped
+
+volumes:
+  neo4j_data:
+    name: neo4j_data
+  neo4j_logs:
+    name: neo4j_logs
+  neo4j_import:
+    name: neo4j_import
+  neo4j_plugins:
+    name: neo4j_plugins
+
