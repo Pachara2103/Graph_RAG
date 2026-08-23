@@ -1,5 +1,5 @@
 import streamlit as st
-from ai import ai_assistant
+from core.ai import ai_assistant
 
 st.set_page_config(
     page_title="NextLink AI",
