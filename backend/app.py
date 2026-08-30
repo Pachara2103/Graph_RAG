@@ -1,13 +1,5 @@
-"""FastAPI entry point.
-
-Nothing but wiring lives here: middleware, the error handlers that turn an
-exception into a response, and the one router include. Endpoints live under
-api/v1/, grouped by the resource they act on.
-"""
-
 import logging
 
-import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -78,4 +70,5 @@ app.include_router(api_router)
 
 
 if __name__ == "__main__":
+    import uvicorn
     uvicorn.run("app:app", host="127.0.0.1", port=8000, reload=True)
