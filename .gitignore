@@ -1,9 +1,0 @@
-node_modules
-graph_rag_env
-__pycache__
-.env
-line_service.py
-line.ts
-package-lock.json
-package.json
-note

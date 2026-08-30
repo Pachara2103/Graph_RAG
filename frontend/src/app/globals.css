@@ -1,0 +1,82 @@
+@import "tailwindcss";
+
+/*
+ * Fonts are injected by next/font in src/app/layout.tsx as CSS variables.
+ * `@theme inline` binds them to Tailwind utilities without an extra var() hop.
+ */
+@theme inline {
+  --font-body: var(--font-anuphan), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bai-jamjuree), var(--font-anuphan), ui-sans-serif, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, monospace;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-slate-900);
+    color: var(--color-slate-300);
+    font-family: var(--font-body);
+  }
+
+  /*
+   * Tailwind v4's preflight gives buttons `cursor: default`. Put the pointer
+   * back on everything clickable, but leave disabled controls alone so their
+   * own `cursor-not-allowed` still reads.
+   */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  label[for],
+  select:not(:disabled),
+  summary {
+    cursor: pointer;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--color-violet-500) 35%, transparent);
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--color-violet-400);
+    outline-offset: 2px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: var(--color-slate-900);
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-slate-700);
+    border: 2px solid var(--color-slate-900);
+    border-radius: 9999px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-slate-600);
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--color-slate-600);
+  }
+
+  /* native dropdown list is painted by the OS — force it dark */
+  select option {
+    background-color: #0f172a;
+    color: #e2e8f0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
