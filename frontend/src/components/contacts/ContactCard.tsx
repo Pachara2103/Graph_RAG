@@ -104,15 +104,23 @@ export function ContactCard({
               <Badge tone="unmatched">ข้อมูลไม่ครบ {missing} ช่อง</Badge>
             )}
           </div>
-          <div className="mt-0.5 flex items-center gap-1.5 text-[12px] text-slate-500">
-            <Icon name="tag" className="size-3.5" />
-            {isBlank(person.relevant) ? (
-              <span className="text-slate-600 italic">ยังไม่ระบุกิจกรรม</span>
-            ) : (
-              <span className="rounded-md border border-slate-600/60 bg-slate-700/40 px-1.5 py-px text-[11px] text-slate-300">
-                {person.relevant}
-              </span>
-            )}
+          <div className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] text-slate-500">
+            <span className="flex items-center gap-1.5">
+              <Icon name="tag" className="size-3.5" />
+              {isBlank(person.relevant) ? (
+                <span className="text-slate-600 italic">ยังไม่ระบุกิจกรรม</span>
+              ) : (
+                <span className="rounded-md border border-slate-600/60 bg-slate-700/40 px-1.5 py-px text-[11px] text-slate-300">
+                  {person.relevant}
+                </span>
+              )}
+            </span>
+            {/* When this row last changed — the reviewer needs it to tell a
+                fresh extraction from one that has been sitting in the queue. */}
+            <span className="flex items-center gap-1.5 tabular-nums">
+              <Icon name="clock" className="size-3.5" />
+              เข้ามาเมื่อ {formatThaiDate(person.updatedAt, true)}
+            </span>
           </div>
         </div>
       </div>

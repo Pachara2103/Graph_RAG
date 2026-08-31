@@ -1,13 +1,17 @@
 import logging
 
+import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from api.v1.router import api_router
 from core.exceptions import AppException
-import os
-logging.basicConfig(level=logging.INFO)
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s [%(levelname)s] %(message)s",
+)
 logger = logging.getLogger(__name__)
 
 
@@ -19,7 +23,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://next-link-eight.vercel.app"],
+    allow_origins=["http://localhost:3000"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -70,5 +74,4 @@ app.include_router(api_router)
 
 
 if __name__ == "__main__":
-    import uvicorn
     uvicorn.run("app:app", host="127.0.0.1", port=8000, reload=True)

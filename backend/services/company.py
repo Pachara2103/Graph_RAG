@@ -46,13 +46,14 @@ def update_company_pg(payload: Company, conn: Any = None, on_create: bool = Fals
     if not payload.company_th and not payload.company_en:
         raise BadRequestError(message="ไม่ระบุชื่อบริษัทที่ต้องการอัปเดต")
     
-    set_matched_clause = "is_company_matched = TRUE," if on_create else ""
-
     query = f"""
         UPDATE line_groups
-        SET company_th = %(company_th)s, 
-            company_en = %(company_en)s,
-            {set_matched_clause}
+        SET company_en = COALESCE(%(company_en)s, company_en),
+            company_th = COALESCE(%(company_th)s, company_th),
+            is_company_matched = CASE 
+              WHEN %(on_create)s THEN TRUE 
+              ELSE is_company_matched 
+            END,
             updated_at = CURRENT_TIMESTAMP
         WHERE line_group_id = %(group_id)s;
     """
@@ -60,7 +61,8 @@ def update_company_pg(payload: Company, conn: Any = None, on_create: bool = Fals
     params = {
         "group_id": payload.group_id,
         "company_th": payload.company_th,
-        "company_en": payload.company_en
+        "company_en": payload.company_en,
+        "on_create": on_create
     }
     try:
         cursor_ctx = conn.cursor() if conn else pg_db.get_cursor()

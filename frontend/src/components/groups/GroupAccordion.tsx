@@ -65,7 +65,7 @@ export function GroupAccordion({
                     <Badge tone="pending">{pending} รออนุมัติ</Badge>
                   )}
                   {pending > 0 && !matched && (
-                    <Badge tone="neutral">{pending} รายการถูกล็อก</Badge>
+                    <Badge tone="neutral">{pending} รออนุมัติ</Badge>
                   )}
                   {allDone && (
                     <Badge tone="neutral">
@@ -122,8 +122,7 @@ export function GroupAccordion({
                 className="mt-0.5 size-4 shrink-0 text-amber-400/70"
               />
               <p className="text-[12.5px] leading-relaxed text-amber-200/70">
-                มีข้อมูลผู้ประสานงาน {pending} รายการรออนุมัติอยู่ แต่ต้องผูกกลุ่มนี้กับ
-                บริษัทก่อน จึงจะเปิดดูและอนุมัติได้
+                มีข้อมูลผู้ประสานงาน {pending} รายการรออนุมัติอยู่ จำเป็นต้องผูกกลุ่มนี้กับบริษัทก่อน จึงจะเปิดดูและอนุมัติได้
               </p>
             </div>
           )}

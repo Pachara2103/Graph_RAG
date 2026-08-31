@@ -17,6 +17,11 @@ export type CompanyOption = (typeof COMPANY_DIRECTORY)[number];
 
 export async function fetchGroupLines(): Promise<GroupLine[]> {
   const data = await lineService.getGroupLines();
+
+  // const data = {
+  //   groups: mockGroupLine(),
+  // };
+
   return data.groups;
 }
 
@@ -132,11 +137,7 @@ export function updateInformation(): Promise<UpdateInformationResponse> {
   return lineService.updateInformation();
 }
 
-/**
- * The mock the console ran on before update_information existed. Nothing calls
- * it now; keep it for working offline — point sync("all") here and it fills
- * every group the real fetchGroupLines() just returned.
- */
+
 export async function mockContactList(
   groups: GroupLine[],
 ): Promise<Record<string, Coordinator[]>> {
@@ -153,3 +154,174 @@ export function searchCompanies(term: string): CompanyOption[] {
     ),
   );
 }
+
+
+export const mockGroupLine = (): GroupLine[] => {
+  const groups: GroupLine[] = [
+    // --- 10 กลุ่มที่ isCompanyMatched = true ---
+    {
+      id: "grp_001",
+      displayName: "LINE Group - PTT Public",
+      companyTh: "บริษัท ปตท. จำกัด (มหาชน)",
+      companyEn: "PTT Public Company Limited",
+      isCompanyMatched: true,
+      updatedAt: "2026-08-30T10:00:00Z",
+    },
+    {
+      id: "grp_002",
+      displayName: "LINE Group - SCG Corp",
+      companyTh: "บริษัท ปูนซิเมนต์ไทย จำกัด (มหาชน)",
+      companyEn: "The Siam Cement Public Company Limited",
+      isCompanyMatched: true,
+      updatedAt: "2026-08-29T14:30:00Z",
+    },
+    {
+      id: "grp_003",
+      displayName: "LINE Group - CP All",
+      companyTh: "บริษัท ซีพี ออลล์ จำกัด (มหาชน)",
+      companyEn: "CP ALL Public Company Limited",
+      isCompanyMatched: true,
+      updatedAt: "2026-08-28T09:15:00Z",
+    },
+    {
+      id: "grp_004",
+      displayName: "LINE Group - AIS Official",
+      companyTh: "บริษัท แอดวานซ์ อินโฟร์ เซอร์วิส จำกัด (มหาชน)",
+      companyEn: "Advanced Info Service Public Company Limited",
+      isCompanyMatched: true,
+      updatedAt: "2026-08-27T16:45:00Z",
+    },
+    {
+      id: "grp_005",
+      displayName: "LINE Group - KBANK Connect",
+      companyTh: "ธนาคารกสิกรไทย จำกัด (มหาชน)",
+      companyEn: "Kasikornbank Public Company Limited",
+      isCompanyMatched: true,
+      updatedAt: "2026-08-26T11:20:00Z",
+    },
+    {
+      id: "grp_006",
+      displayName: "LINE Group - SCB Tech",
+      companyTh: "ธนาคารไทยพาณิชย์ จำกัด (มหาชน)",
+      companyEn: "The Siam Commercial Bank Public Company Limited",
+      isCompanyMatched: true,
+      updatedAt: "2026-08-25T08:00:00Z",
+    },
+    {
+      id: "grp_007",
+      displayName: "LINE Group - Central Pattana",
+      companyTh: "บริษัท เซ็นทรัลพัฒนา จำกัด (มหาชน)",
+      companyEn: "Central Pattana Public Company Limited",
+      isCompanyMatched: true,
+      updatedAt: "2026-08-24T13:10:00Z",
+    },
+    {
+      id: "grp_008",
+      displayName: "LINE Group - Gulf Energy",
+      companyTh: "บริษัท กัลฟ์ เอ็นเนอร์จี ดีเวลลอปเมนท์ จำกัด (มหาชน)",
+      companyEn: "Gulf Energy Development Public Company Limited",
+      isCompanyMatched: true,
+      updatedAt: "2026-08-23T17:05:00Z",
+    },
+    {
+      id: "grp_009",
+      displayName: "LINE Group - True Corp",
+      companyTh: "บริษัท ทรู คอร์ปอเรชั่น จำกัด (มหาชน)",
+      companyEn: "True Corporation Public Company Limited",
+      isCompanyMatched: true,
+      updatedAt: "2026-08-22T15:40:00Z",
+    },
+    {
+      id: "grp_010",
+      displayName: "LINE Group - ThaiBev",
+      companyTh: "บริษัท ไทยเบฟเวอเรจ จำกัด (มหาชน)",
+      companyEn: "Thai Beverage Public Company Limited",
+      isCompanyMatched: true,
+      updatedAt: "2026-08-21T12:00:00Z",
+    },
+
+    // --- 10 กลุ่มที่ isCompanyMatched = false ---
+    {
+      id: "grp_011",
+      displayName: "LINE Group - General Discussion",
+      companyTh: null,
+      companyEn: null,
+      isCompanyMatched: false,
+      updatedAt: null,
+    },
+    {
+      id: "grp_012",
+      displayName: "LINE Group - Sales Lead 2026",
+      companyTh: "บริษัท เซลส์พลัส จำกัด",
+      companyEn: null,
+      isCompanyMatched: false,
+      updatedAt: "2026-08-20T10:00:00Z",
+    },
+    {
+      id: "grp_013",
+      displayName: "LINE Group - Tech Project",
+      companyTh: null,
+      companyEn: "Tech Solution Co., Ltd.",
+      isCompanyMatched: false,
+      updatedAt: "2026-08-19T14:20:00Z",
+    },
+    {
+      id: "grp_014",
+      displayName: "LINE Group - Marketing Team",
+      companyTh: null,
+      companyEn: null,
+      isCompanyMatched: false,
+      updatedAt: null,
+    },
+    {
+      id: "grp_015",
+      displayName: "LINE Group - Vendor A",
+      companyTh: "บริษัท ซัพพลายเออร์ A จำกัด",
+      companyEn: null,
+      isCompanyMatched: false,
+      updatedAt: "2026-08-18T16:00:00Z",
+    },
+    {
+      id: "grp_016",
+      displayName: "LINE Group - Client Support",
+      companyTh: null,
+      companyEn: "Global Support Inc.",
+      isCompanyMatched: false,
+      updatedAt: "2026-08-17T09:30:00Z",
+    },
+    {
+      id: "grp_017",
+      displayName: "LINE Group - Pending Verification",
+      companyTh: "บริษัท รอตรวจสอบ จำกัด",
+      companyEn: "Pending Verification Co., Ltd.",
+      isCompanyMatched: false,
+      updatedAt: "2026-08-16T11:45:00Z",
+    },
+    {
+      id: "grp_018",
+      displayName: "LINE Group - Event Coordinators",
+      companyTh: null,
+      companyEn: null,
+      isCompanyMatched: false,
+      updatedAt: null,
+    },
+    {
+      id: "grp_019",
+      displayName: "LINE Group - Logistics Chat",
+      companyTh: "บริษัท ขนส่งไทย จำกัด",
+      companyEn: null,
+      isCompanyMatched: false,
+      updatedAt: "2026-08-15T13:50:00Z",
+    },
+    {
+      id: "grp_020",
+      displayName: "LINE Group - Unknown Partner",
+      companyTh: null,
+      companyEn: null,
+      isCompanyMatched: false,
+      updatedAt: null,
+    },
+  ];
+
+  return groups
+};

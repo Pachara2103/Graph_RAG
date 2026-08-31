@@ -76,3 +76,19 @@ export function paginate<T>(
     items: items.slice(start, start + perPage),
   };
 }
+
+/**
+ * Newest first, for the coordinator rows inside one group card. The reviewer
+ * reads a group top-down, so the row that changed most recently has to be the
+ * first one they see. Rows without updatedAt sink to the bottom, the same way
+ * sortGroups treats them under time-desc.
+ */
+export function sortByUpdatedDesc<T extends { updatedAt: string | null }>(
+  items: T[],
+): T[] {
+  return [...items].sort(
+    (a, b) =>
+      time(b.updatedAt, Number.NEGATIVE_INFINITY) -
+      time(a.updatedAt, Number.NEGATIVE_INFINITY),
+  );
+}

@@ -12,7 +12,7 @@ def get_line_groups_api(user: AuthUser = Depends(current_user)):
     return get_line_groups()
 
 
-@router.get("/update-information", response_model=LineUpdateInformationResponse)
+@router.post("/update-information", response_model=LineUpdateInformationResponse)
 def update_information_api(user: AuthUser = Depends(current_user)):
     error_groups  = update_information(user.id)
     return LineUpdateInformationResponse(error_groups=error_groups)

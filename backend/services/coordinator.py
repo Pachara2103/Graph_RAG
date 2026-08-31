@@ -206,7 +206,13 @@ def decline(coordinator_id: int, user_id: str="bot"):
     
     
 
-def create_pending_coordinator(payload: Coordinator, user_id: str):
+def create_pending_coordinator(payload: Coordinator, user_id: str = "bot", conn: Any = None):
+    if not payload.group_id:
+        raise BadRequestError(message="ไม่พบข้อมูลกลุ่มไลน์ที่ต้องการ")
+    
+    if not conn:
+        raise BadRequestError(message="ไม่สามารถเชื่อมต่อกับฐานข้อมูลได้")
+    
     sql = """
         INSERT INTO approval_logs (
             group_id, user_id, status, name_th, name_en, nickname, 
@@ -232,7 +238,7 @@ def create_pending_coordinator(payload: Coordinator, user_id: str):
     params["user_id"] = user_id
     
     try:
-        with pg_db.get_cursor() as cursor:
+        with conn.cursor() as cursor:
             cursor.execute(sql, params)              
 
     except Exception as e:

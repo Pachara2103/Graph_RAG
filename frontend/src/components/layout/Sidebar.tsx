@@ -19,7 +19,7 @@ interface NavItem {
 export const NAV_ITEMS: NavItem[] = [
   { key: "contacts", label: "ข้อมูลผู้ประสานงาน", icon: "inbox" },
   { key: "groups", label: "กลุ่มไลน์และบริษัท", icon: "building" },
-  { key: "library", label: "คลังสถานะ & Component", icon: "layers" },
+  // { key: "library", label: "คลังสถานะ & Component", icon: "layers" },
 ];
 
 export function Sidebar({

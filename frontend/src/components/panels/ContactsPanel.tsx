@@ -5,10 +5,11 @@ import { useMemo, useState } from "react";
 import { GroupAccordion } from "@/components/groups/GroupAccordion";
 import { EmptyState, GroupCardSkeleton } from "@/components/ui/EmptyState";
 import { SortSelect } from "@/components/ui/Field";
+import { Pagination } from "@/components/ui/Pagination";
 import { FilterTabs } from "@/components/ui/SegmentedControl";
 import { StatCard } from "@/components/ui/StatCard";
 import { SORT_OPTIONS } from "@/lib/constants";
-import { sortGroups } from "@/lib/filters";
+import { paginate, sortByUpdatedDesc, sortGroups } from "@/lib/filters";
 import { useConsole } from "@/store/console-store";
 import type { ContactStatus, SortOption } from "@/types";
 
@@ -35,22 +36,25 @@ export function ContactsPanel() {
 
   const [filter, setFilter] = useState<Filter>("pending");
   const [sortBy, setSortBy] = useState<SortOption>("time-desc");
+  const [page, setPage] = useState(1);
 
   const rows = useMemo(() => {
     // Each tab shows only the rows in that state, so a coordinator moves out of
     // รออนุมัติ and into อนุมัติแล้ว the moment it is approved.
     const withContacts = groupLines.map((group) => ({
       group,
-      people: (contacts[group.id] ?? []).filter((p) => p.status === filter),
+      // Newest first inside the card, independent of how the groups themselves
+      // are ordered: the row the reviewer last touched is the one they expect
+      // at the top.
+      people: sortByUpdatedDesc(
+        (contacts[group.id] ?? []).filter((p) => p.status === filter),
+      ),
     }));
 
-    const filtered = withContacts.filter(({ group, people }) => {
-      // A group with no company cannot have anything approved, and it is the
-      // one thing the reviewer has to act on, so it belongs under รออนุมัติ
-      // even when the LLM found nobody in it yet.
-      if (filter === "pending" && !group.isCompanyMatched) return true;
-      return people.length > 0;
-    });
+    // Every tab, รออนุมัติ included, lists only the groups that actually hold a
+    // row in that state. A group with no company and no pending coordinator has
+    // nothing to review here; it is acted on from กลุ่มไลน์และบริษัท instead.
+    const filtered = withContacts.filter(({ people }) => people.length > 0);
 
     const order = sortGroups(
       filtered.map((row) => row.group),
@@ -60,6 +64,10 @@ export function ContactsPanel() {
       (group) => filtered.find((row) => row.group.id === group.id)!,
     );
   }, [groupLines, contacts, filter, sortBy]);
+
+  // Same 5-row window as กลุ่มไลน์และบริษัท. Switching tab or sort starts over
+  // at page 1, so the reviewer never lands on an empty page.
+  const view = paginate(rows, page);
 
   const matchedRatio =
     groupLines.length === 0
@@ -110,7 +118,10 @@ export function ContactsPanel() {
       <div className="mt-7 flex flex-wrap items-center gap-3">
         <FilterTabs
           value={filter}
-          onChange={setFilter}
+          onChange={(next) => {
+            setFilter(next);
+            setPage(1);
+          }}
           options={(Object.keys(FILTER_LABELS) as Filter[]).map((key) => ({
             value: key,
             label: FILTER_LABELS[key],
@@ -125,7 +136,10 @@ export function ContactsPanel() {
             label="เรียงรายการกลุ่มไลน์"
             options={SORT_OPTIONS}
             value={sortBy}
-            onChange={(event) => setSortBy(event.target.value as SortOption)}
+            onChange={(event) => {
+              setSortBy(event.target.value as SortOption);
+              setPage(1);
+            }}
           />
         </div>
       </div>
@@ -148,9 +162,16 @@ export function ContactsPanel() {
             }
           />
         ) : (
-          rows.map(({ group, people }) => (
-            <GroupAccordion key={group.id} group={group} contacts={people} />
-          ))
+          <>
+            {view.items.map(({ group, people }) => (
+              <GroupAccordion key={group.id} group={group} contacts={people} />
+            ))}
+            <Pagination
+              page={view.page}
+              totalPages={view.totalPages}
+              onChange={setPage}
+            />
+          </>
         )}
       </div>
     </div>
